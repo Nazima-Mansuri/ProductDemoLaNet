@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -154,20 +156,55 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mState = 0;
         invalidateOptionsMenu();
-        if (requestCode == ACTION_REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
+        if (requestCode == ACTION_REQUEST_CAMERA && resultCode == Activity.RESULT_OK)
+        {
             super.onActivityResult(requestCode, resultCode, data);
+
             Uri selectedImage = imageUri;
             getContentResolver().notifyChange(selectedImage, null);
             ContentResolver cr = getContentResolver();
             try {
+
                 bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                picturePath = selectedImage.getPath();
+                ExifInterface exif = new ExifInterface(picturePath);
+                int orientation = exif.getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL);
+
+                int angle = 0;
+
+                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                    angle = 90;
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                    angle = 180;
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                    angle = 270;
+                }
+
+                Matrix mat = new Matrix();
+                mat.postRotate(angle);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+
+                Bitmap bmp = BitmapFactory.decodeStream(new FileInputStream(picturePath),
+                        null, options);
+                bitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
+                        bmp.getHeight(), mat, true);
+                ByteArrayOutputStream outstudentstreamOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100,
+                        outstudentstreamOutputStream);
                 profileImage.setImageBitmap(bitmap);
+                /*
+                picturePath = selectedImage.getPath();
+                profileImage.setImageBitmap(bitmap);*/
+
                 Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
                 Log.d("Message", "Camera" + e.toString());
             }
+
+
         } else if (requestCode == ACTION_REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
 
             if (data.getData() != null) {
@@ -191,6 +228,12 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,true);
     }
 
     @Override
