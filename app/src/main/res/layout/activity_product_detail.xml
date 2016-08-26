@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_product_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lcom67.productdemoapp.ProductDetailActivity"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/toolbar">
+        </include>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/value_24dp"
+            android:layout_marginBottom="@dimen/value_16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_product_name"
+                android:hint="@string/productname"
+                android:textSize="@dimen/value_24sp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_product_price"
+                android:hint="@string/productprice"
+                android:textSize="@dimen/value_20sp"
+                android:layout_marginTop="@dimen/value_8dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_description"
+                android:hint="@string/description"
+                android:textSize="@dimen/value_16sp"
+                android:layout_marginTop="@dimen/value_8dp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/value_16dp">
+            <ImageView
+                android:layout_width="@dimen/value_120dp"
+                android:layout_height="@dimen/value_120dp"
+                android:id="@+id/img_detail_product_image"
+                android:src="@drawable/add"
+                android:layout_marginLeft="@dimen/value_48dp"
+                android:layout_marginRight="@dimen/value_48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/value_16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Gallery
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/product_gallery"
+                    android:spacing="@dimen/value_5dp">
+                </Gallery>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/value_16dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:tint="@color/colorWhite"
+            app:fabSize="normal"
+            android:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"/>
+    </FrameLayout>
+
+
+
+    </LinearLayout>

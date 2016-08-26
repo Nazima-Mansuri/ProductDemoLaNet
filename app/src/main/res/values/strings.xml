@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ProductDemoApp</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_id">Email Id</string>
+    <string name="address">Address</string>
+    <string name="submit">Submit</string>
+    <string name="takepic">Take From Camera</string>
+    <string name="opengallery">Open from gallery</string>
+    <string name="productname">Product Name</string>
+    <string name="productprice">Product Price</string>
+    <string name="description">Description</string>
+    <string name="productimage"> Select Product Image :</string>
+    <string name="alredyaccount">Already Have an Account ?</string>
+    <string name="registeruser">Create a new account </string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+</resources>

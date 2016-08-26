@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+    </style>
+
+    <style name="EdittextMargin">
+        <item name="android:layout_marginLeft">@dimen/value_lr_16dp</item>
+        <item name="android:layout_marginRight">@dimen/value_lr_16dp</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">@dimen/value_20sp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/value_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/value_btn_24dp</item>
+        <item name="android:layout_marginRight">@dimen/value_btn_24dp</item>
+        <item name="android:layout_marginBottom">@dimen/value_16dp</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+</resources>
