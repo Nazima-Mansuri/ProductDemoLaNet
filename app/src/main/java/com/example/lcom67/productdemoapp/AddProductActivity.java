@@ -1,8 +1,6 @@
 package com.example.lcom67.productdemoapp;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,13 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,29 +22,27 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lcom67.productdemoapp.AsyncTaskClass.GetPostMethodClass;
+import com.example.lcom67.productdemoapp.BottomSheet.BottomSheet;
+import com.example.lcom67.productdemoapp.BottomSheet.BottomSheetListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class AddProductActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddProductActivity extends AppCompatActivity implements View.OnClickListener , BottomSheetListener {
     String URL = "http://192.168.200.64:4000/product/";
     EditText productName, productPrice, description;
     ImageView image1, image2, image3, image4, image5, defaultImage;
@@ -73,6 +69,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     String defaultPath, image1Path, image2Path, image3Path, image4Path, image5Path;
     List<String> pathList;
     Boolean isUpdate;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +181,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         str_description = description.getText().toString();
 
 
-        int id = view.getId();
+         id = view.getId();
 
         if (id == R.id.btn_add_product)
         {
@@ -226,7 +223,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -250,7 +247,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -263,7 +267,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -296,7 +300,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -309,7 +320,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.product_image2) {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -342,7 +353,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -354,7 +372,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.product_image3) {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+              /*  AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -387,7 +405,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -399,7 +424,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.product_image4) {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -432,7 +457,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -444,7 +476,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.product_image5) {
             if(isUpdate == true)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
                 builder.setTitle("Choose Image Source");
                 builder.setItems(new CharSequence[] {"Pick Image From Gallery", "Delete"},
                         new DialogInterface.OnClickListener()
@@ -477,7 +509,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                builder.show();
+                builder.show();*/
+
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.grid_sheet)
+                        .grid()
+                        .setTitle("Options")
+                        .setListener(this)
+                        .show();
             }
             else
             {
@@ -619,6 +658,132 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+    }
+
+    @Override
+    public void onSheetShown(@NonNull BottomSheet bottomSheet)
+    {
+
+    }
+
+    @Override
+    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem item)
+    {
+            if(item.getItemId() == R.id.gallery)
+            {
+                switch (id)
+                {
+                    case R.id.img_add_product_image:
+                        Intent i = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, PICK_IMAGE_MULTIPLE);
+                        break;
+                    case R.id.product_image1:
+                        Intent i1 = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i1, PICK_IMAGE1);
+                        break;
+                    case R.id.product_image2:
+                        Intent i2 = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i2, PICK_IMAGE2);
+                        break;
+                    case R.id.product_image3:
+                        Intent i3 = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i3, PICK_IMAGE3);
+                        break;
+                    case R.id.product_image4:
+                        Intent i4 = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i4, PICK_IMAGE4);
+                        break;
+                    case R.id.product_image5:
+                        Intent i5 = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i5, PICK_IMAGE5);
+                        break;
+                }
+
+            }
+            else if(item.getItemId() == R.id.delete)
+            {
+                switch (id)
+                {
+                    case R.id.img_add_product_image:
+                        defaultImage.setImageResource(R.drawable.default_product);
+                        break;
+                    case R.id.product_image1:
+                        image1.setImageResource(R.drawable.add);
+                        try
+                        {
+                            jsonObject.put("product_image_url",imageList.get(1));
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        new DeleteImageOperation().execute();
+                        break;
+                    case R.id.product_image2:
+                        image2.setImageResource(R.drawable.add);
+                        try
+                        {
+                            jsonObject.put("product_image_url",imageList.get(2));
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        new DeleteImageOperation().execute();
+                        break;
+                    case R.id.product_image3:
+                        image3.setImageResource(R.drawable.add);
+                        try
+                        {
+                            jsonObject.put("product_image_url",imageList.get(3));
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        new DeleteImageOperation().execute();
+                        break;
+                    case R.id.product_image4:
+                        image4.setImageResource(R.drawable.add);
+                        try
+                        {
+                            jsonObject.put("product_image_url",imageList.get(4));
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        new DeleteImageOperation().execute();
+                        break;
+                    case R.id.product_image5:
+                        image5.setImageResource(R.drawable.add);
+                        try
+                        {
+                            jsonObject.put("product_image_url",imageList.get(5));
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        new DeleteImageOperation().execute();
+                        break;
+
+                }
+
+            }
+
+    }
+
+    @Override
+    public void onSheetDismissed(@NonNull BottomSheet bottomSheet, @DismissEvent int dismissEvent)
+    {
 
     }
 

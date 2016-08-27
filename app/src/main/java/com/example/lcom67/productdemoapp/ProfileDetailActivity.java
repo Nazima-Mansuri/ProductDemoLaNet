@@ -3,22 +3,17 @@ package com.example.lcom67.productdemoapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,18 +26,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lcom67.productdemoapp.AsyncTaskClass.GetPostMethodClass;
+import com.example.lcom67.productdemoapp.BottomSheet.BottomSheet;
+import com.example.lcom67.productdemoapp.BottomSheet.BottomSheetListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -50,7 +43,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ProfileDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileDetailActivity extends AppCompatActivity implements View.OnClickListener,BottomSheetListener {
     String URL = "http://192.168.200.64:4000/";
     TextView firstname, lastname, username, address;
     ImageView profileImage;
@@ -68,6 +61,7 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     private String picturePath;
     MenuItem save;
     private Uri imageUri;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +106,13 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.img_profile) {
+    public void onClick(View view)
+    {
+        id = view.getId();
+        if (id == R.id.img_profile)
+        {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(ProfileDetailActivity.this);
+           /* AlertDialog.Builder builder = new AlertDialog.Builder(ProfileDetailActivity.this);
             builder.setTitle("Choose Image Source");
             builder.setItems(new CharSequence[]{"Gallery", "Camera"},
                     new DialogInterface.OnClickListener() {
@@ -146,7 +143,14 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
                         }
                     });
 
-            builder.show();
+            builder.show();*/
+
+            new BottomSheet.Builder(this)
+                    .setSheet(R.menu.profile_sheet)
+                    .grid()
+                    .setTitle("Options")
+                    .setListener(this)
+                    .show();
 
             mState = 0;
         }
@@ -164,42 +168,13 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
             getContentResolver().notifyChange(selectedImage, null);
             ContentResolver cr = getContentResolver();
             try {
-
                 bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                ExifInterface exif = new ExifInterface(picturePath);
-                int orientation = exif.getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_NORMAL);
-
-                int angle = 0;
-
-                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                    angle = 90;
-                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                    angle = 180;
-                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                    angle = 270;
-                }
-
-                Matrix mat = new Matrix();
-                mat.postRotate(angle);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-
-                Bitmap bmp = BitmapFactory.decodeStream(new FileInputStream(picturePath),
-                        null, options);
-                bitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
-                        bmp.getHeight(), mat, true);
-                ByteArrayOutputStream outstudentstreamOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100,
-                        outstudentstreamOutputStream);
-                profileImage.setImageBitmap(bitmap);
-                /*
                 picturePath = selectedImage.getPath();
-                profileImage.setImageBitmap(bitmap);*/
-
+                profileImage.setImageBitmap(bitmap);
                 Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
                 Log.d("Message", "Camera" + e.toString());
             }
@@ -255,6 +230,43 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
             new UpdateImageOperation().execute(updateImageURL);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSheetShown(@NonNull BottomSheet bottomSheet) {
+
+    }
+
+    @Override
+    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem item)
+    {
+        if(item.getItemId() == R.id.profile_gallery)
+        {
+            Intent i = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, ACTION_REQUEST_GALLERY);
+
+        }
+        else if(item.getItemId() == R.id.profile_camera)
+        {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File photo = new File(Environment.getExternalStorageDirectory(), timeStamp + ".jpg");
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(photo));
+            imageUri = Uri.fromFile(photo);
+            startActivityForResult(intent, ACTION_REQUEST_CAMERA);
+        }
+        else if(item.getItemId() == R.id.profile_delete)
+        {
+            profileImage.setImageResource(R.drawable.profile_image);
+        }
+
+    }
+
+    @Override
+    public void onSheetDismissed(@NonNull BottomSheet bottomSheet, @DismissEvent int dismissEvent) {
+
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -358,11 +370,11 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
 
                 if (json.getString("status").equals("1")) {
                     str_profileImage = json.getString("profile_image");
-
+/*
                     Picasso.with(ProfileDetailActivity.this)
                             .load(str_profileImage)
                             .placeholder(R.drawable.profile_image)
-                            .into(profileImage);
+                            .into(profileImage);*/
 
                     Toast.makeText(ProfileDetailActivity.this, " Profile Pic Update..", Toast.LENGTH_SHORT).show();
                     save.setVisible(false);
