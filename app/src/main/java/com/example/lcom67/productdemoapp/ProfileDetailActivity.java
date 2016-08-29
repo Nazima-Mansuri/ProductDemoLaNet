@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -43,7 +44,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ProfileDetailActivity extends AppCompatActivity implements View.OnClickListener,BottomSheetListener {
+public class ProfileDetailActivity extends AppCompatActivity implements View.OnClickListener, BottomSheetListener {
     String URL = "http://192.168.200.64:4000/";
     TextView firstname, lastname, username, address;
     ImageView profileImage;
@@ -106,11 +107,9 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
         id = view.getId();
-        if (id == R.id.img_profile)
-        {
+        if (id == R.id.img_profile) {
 
            /* AlertDialog.Builder builder = new AlertDialog.Builder(ProfileDetailActivity.this);
             builder.setTitle("Choose Image Source");
@@ -160,21 +159,39 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mState = 0;
         invalidateOptionsMenu();
-        if (requestCode == ACTION_REQUEST_CAMERA && resultCode == Activity.RESULT_OK)
-        {
+        if (requestCode == ACTION_REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
             super.onActivityResult(requestCode, resultCode, data);
 
             Uri selectedImage = imageUri;
             getContentResolver().notifyChange(selectedImage, null);
             ContentResolver cr = getContentResolver();
-            try {
+            try
+            {
                 bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
                 picturePath = selectedImage.getPath();
+                ExifInterface ei = new ExifInterface(picturePath);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                switch (orientation)
+                {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        bitmap = rotateImage(bitmap, 90);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        bitmap = rotateImage(bitmap, 180);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        bitmap = rotateImage(bitmap, 270);
+                        break;
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        break;
+                }
+
                 profileImage.setImageBitmap(bitmap);
                 Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
                 Log.d("Message", "Camera" + e.toString());
             }
@@ -208,7 +225,7 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     public static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,true);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     @Override
@@ -238,17 +255,13 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem item)
-    {
-        if(item.getItemId() == R.id.profile_gallery)
-        {
+    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem item) {
+        if (item.getItemId() == R.id.profile_gallery) {
             Intent i = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(i, ACTION_REQUEST_GALLERY);
 
-        }
-        else if(item.getItemId() == R.id.profile_camera)
-        {
+        } else if (item.getItemId() == R.id.profile_camera) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File photo = new File(Environment.getExternalStorageDirectory(), timeStamp + ".jpg");
@@ -256,9 +269,7 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
                     Uri.fromFile(photo));
             imageUri = Uri.fromFile(photo);
             startActivityForResult(intent, ACTION_REQUEST_CAMERA);
-        }
-        else if(item.getItemId() == R.id.profile_delete)
-        {
+        } else if (item.getItemId() == R.id.profile_delete) {
             profileImage.setImageResource(R.drawable.profile_image);
         }
 
@@ -324,27 +335,21 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
                             .load(str_profileImage)
                             .placeholder(R.drawable.profile_image)
                             .into(profileImage);
-                }
-                else
-                {
+                } else {
                     Toast.makeText(ProfileDetailActivity.this, " No User Exist..", Toast.LENGTH_SHORT).show();
                 }
-            }
-            catch (JSONException e)
-            {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
     }
 
-    private class UpdateImageOperation extends AsyncTask<String, Void, String>
-    {
+    private class UpdateImageOperation extends AsyncTask<String, Void, String> {
         ProgressDialog dialog;
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             dialog = new ProgressDialog(ProfileDetailActivity.this);
             dialog.setMessage("Please wait..");
             dialog.show();
@@ -352,16 +357,14 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
         }
 
         @Override
-        protected String doInBackground(String... strings)
-        {
+        protected String doInBackground(String... strings) {
             String result = uploadFileAndParam(updateImageURL, sign_id, picturePath);
             Log.d("Message", " Result iS :  " + result);
             return result;
         }
 
         @Override
-        protected void onPostExecute(String s)
-        {
+        protected void onPostExecute(String s) {
             super.onPostExecute(s);
             dialog.dismiss();
 
@@ -383,8 +386,7 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
                     ii.putExtra("profile_image", str_profileImage);
                     setResult(RESULT_OK, ii);
                     finish();
-                }
-                else
+                } else
                 {
                     Picasso.with(ProfileDetailActivity.this)
                             .load(str_profileImage)
@@ -394,9 +396,7 @@ public class ProfileDetailActivity extends AppCompatActivity implements View.OnC
                     save.setVisible(false);
                 }
 
-            }
-            catch (JSONException e)
-            {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }

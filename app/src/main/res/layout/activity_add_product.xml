@@ -50,7 +50,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/et_product_price"
                         android:hint="@string/productprice"
-                        style="@style/EdittextMargin" />
+                        style="@style/EdittextMargin"
+                        android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

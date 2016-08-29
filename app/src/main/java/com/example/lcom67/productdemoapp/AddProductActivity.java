@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -39,8 +40,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener , BottomSheetListener {
     String URL = "http://192.168.200.64:4000/product/";
@@ -176,12 +180,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
+
+
         str_Name = productName.getText().toString();
         str_Price = productPrice.getText().toString();
         str_description = description.getText().toString();
 
-
-         id = view.getId();
+        id = view.getId();
 
         if (id == R.id.btn_add_product)
         {
@@ -201,16 +206,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
                 new UpdateOperation().execute(productUpdateURL);
 
-                if(defaultPath != null)
-                {
+                if(defaultPath != null) {
                     new UpdateDefaultImageOperation().execute(updateDefaultImage);
 
                 }
-
                 if(pathList.size() !=  0)
                 {
                     new ImageOperation().execute(imageUploadURL);
 
+                }
+                else
+                {
+                    Intent intent = new Intent(AddProductActivity.this,ListOfProductActivity.class);
+                    startActivity(intent);
                 }
             }
             else

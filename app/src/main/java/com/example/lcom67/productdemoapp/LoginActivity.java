@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
     EditText username, password;
-    TextView forgotPassword,registerUser;
-    Button login;
+    TextView forgotPassword;
+    Button login,signup;
     private Toolbar toolbar;
     JSONObject jsonObject;
     String loginURL = "http://192.168.200.64:4000/register/signin";
@@ -42,9 +43,9 @@ public class LoginActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.et_login_userName);
         password = (EditText) findViewById(R.id.et_login_password);
         forgotPassword = (TextView) findViewById(R.id.tv_forgotPassword);
-        registerUser = (TextView) findViewById(R.id.tv_registerUser);
 
         login = (Button) findViewById(R.id.btn_login);
+        signup = (Button) findViewById(R.id.btn_signup);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        registerUser.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this , RegistrationActivity.class);

@@ -67,8 +67,7 @@ import java.util.Date;
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener
 {
     EditText firstName,lastname,userName,password,emailId,address;
-    Button submit;
-    TextView alreadyAccount;
+    Button submit,login;
     ImageView profileImage;
     String URL = "http://192.168.200.64:4000/register/";
     String fName,lName,uName,email,passwd,adrs;
@@ -108,9 +107,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         password = (EditText) findViewById(R.id.et_register_password);
         address = (EditText) findViewById(R.id.et_address);
 
-        alreadyAccount = (TextView) findViewById(R.id.tv_alredy_account);
         submit = (Button) findViewById(R.id.btn_submit);
-
+        login = (Button) findViewById(R.id.btn_login);
 
         // TextInputLayout ID
         firstNameWrapper = (TextInputLayout) findViewById(R.id.firstNameWrapper);
@@ -124,7 +122,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
         profileImage.setOnClickListener(this);
         submit.setOnClickListener(this);
-        alreadyAccount.setOnClickListener(this);
+        login.setOnClickListener(this);
 
     }
 
@@ -368,7 +366,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 new InsertOperation().execute();
             }
         }
-        else if(id == R.id.tv_alredy_account)
+        else if(id == R.id.btn_login)
         {
             Intent intent = new Intent(RegistrationActivity.this,LoginActivity.class);
             startActivity(intent);

@@ -37,8 +37,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.R.attr.data;
 
@@ -181,9 +183,9 @@ public class ListOfProductActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.header_profile_image) {
-            Intent intent = new Intent(ListOfProductActivity.this, ProfileDetailActivity.class);
-            startActivityForResult(intent, 111);
-        } else if (id == R.id.fab) {
+
+        } else if (id == R.id.fab)
+        {
             Intent intent = new Intent(ListOfProductActivity.this, AddProductActivity.class);
             startActivity(intent);
         }
@@ -196,9 +198,15 @@ public class ListOfProductActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.nav_Logout) {
+        if (item.getItemId() == R.id.nav_Logout)
+        {
             Intent intent = new Intent(ListOfProductActivity.this, LoginActivity.class);
             startActivity(intent);
+        }
+        else if(item.getItemId() == R.id.nav_Profile)
+        {
+            Intent intent= new Intent(ListOfProductActivity.this,ProfileDetailActivity.class);
+            startActivityForResult(intent, 111);
         }
         return false;
     }
@@ -269,7 +277,11 @@ public class ListOfProductActivity extends AppCompatActivity implements View.OnC
 
                         JSONObject jsonProduct = jsonArray.getJSONObject(i);
                         contacts.setProductName(jsonProduct.getString("PRODUCT_NAME"));
-                        contacts.setProductPrice(jsonProduct.getString("PRODUCT_PRICE"));
+
+                        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                        String price = formatter.format( Float.parseFloat(jsonProduct.getString("PRODUCT_PRICE")));
+
+                        contacts.setProductPrice(price);
                         contacts.setDescription(jsonProduct.getString("PRODUCT_DESCRIPTION"));
                         contacts.setImagePath(jsonProduct.getString("PRODUCT_DEFAULT_IMAGE"));
                         contacts.setId(jsonProduct.getInt("PRODUCT_ID"));
@@ -288,7 +300,11 @@ public class ListOfProductActivity extends AppCompatActivity implements View.OnC
 
                         JSONObject jsonProduct = jsonArray.getJSONObject(i);
                         contacts.setProductName(jsonProduct.getString("PRODUCT_NAME"));
-                        contacts.setProductPrice(jsonProduct.getString("PRODUCT_PRICE"));
+
+                        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                        String price = formatter.format( Float.parseFloat(jsonProduct.getString("PRODUCT_PRICE")));
+
+                        contacts.setProductPrice(price);
                         contacts.setDescription(jsonProduct.getString("PRODUCT_DESCRIPTION"));
                         contacts.setId(jsonProduct.getInt("PRODUCT_ID"));
 

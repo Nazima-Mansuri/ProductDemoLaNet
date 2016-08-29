@@ -26,45 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/value_24dp"
-            android:layout_marginBottom="@dimen/value_16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_product_name"
-                android:hint="@string/productname"
-                android:textSize="@dimen/value_24sp"
-                android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_product_price"
-                android:hint="@string/productprice"
-                android:textSize="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_8dp"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_description"
-                android:hint="@string/description"
-                android:textSize="@dimen/value_16sp"
-                android:layout_marginTop="@dimen/value_8dp"
-                android:gravity="center"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
             android:layout_marginTop="@dimen/value_16dp">
-            <ImageView
+            <!--<ImageView
                 android:layout_width="@dimen/value_120dp"
                 android:layout_height="@dimen/value_120dp"
                 android:id="@+id/img_detail_product_image"
@@ -72,20 +35,60 @@
                 android:layout_marginLeft="@dimen/value_48dp"
                 android:layout_marginRight="@dimen/value_48dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/value_16dp"/>
+                android:layout_marginTop="@dimen/value_16dp"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <Gallery
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <!-- This LinearLayout if for the dots -->
+                <LinearLayout android:id="@+id/image_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/product_gallery"
-                    android:spacing="@dimen/value_5dp">
-                </Gallery>
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="#00000000">
+                </LinearLayout>
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/value_24dp"
+                android:layout_marginBottom="@dimen/value_16dp"
+                android:layout_marginLeft="@dimen/value_16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_product_name"
+                    android:hint="@string/productname"
+                    android:textSize="@dimen/value_24sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_product_price"
+                    android:hint="@string/productprice"
+                    android:textSize="@dimen/value_20sp"
+                    android:layout_marginTop="@dimen/value_8dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_description"
+                    android:hint="@string/description"
+                    android:textSize="@dimen/value_16sp"
+                    android:layout_marginTop="@dimen/value_8dp" />
             </LinearLayout>
         </LinearLayout>
 
